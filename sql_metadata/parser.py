@@ -350,6 +350,13 @@ class Parser:  # pylint: disable=R0902
         for token in self._not_parsed_tokens:
             if token.is_potential_table_name:
                 if (
+                    (token.value == "," and token.last_keyword_normalized == "ON")
+                    or token.previous_token.normalized in {"("}
+                ):
+                    print(f'[Warning] Skipping token "{token.value}"')
+                    continue
+
+                if (
                     token.is_alias_of_table_or_alias_of_subquery
                     or token.is_with_statement_nested_in_subquery
                     or token.is_constraint_definition_inside_create_table_clause(
