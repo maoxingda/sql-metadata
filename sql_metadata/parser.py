@@ -4,6 +4,7 @@ This module provides SQL query parsing functions
 """
 import logging
 import re
+import sys
 from typing import Dict, List, Optional, Set, Tuple, Union
 
 import sqlparse
@@ -351,9 +352,9 @@ class Parser:  # pylint: disable=R0902
             if token.is_potential_table_name:
                 if (
                     (token.value == "," and token.last_keyword_normalized == "ON")
-                    or token.previous_token.normalized in {"("}
+                    or token.previous_token.normalized in {"(", ","}
                 ):
-                    print(f'[Warning] Skipping token "{token.value}"')
+                    sys.stderr.write(f'[Warning] Skipping token "{token.value}"\n')
                     continue
 
                 if (
